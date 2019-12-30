@@ -160,6 +160,31 @@ export const constantRoutes = [
         meta: { title: '外向连接', icon: 'link' }
       }
     ]
+  }
+
+]
+
+/**
+ * 动态路由
+ * 思路：在后端返回的角色与 meta.roles 匹配
+ * 优化：这仅是角色层面的判断，粒度可变成权限层面的
+ */
+export const asyncRoutes = [
+  {
+    path: '/tmp',
+    component: Layout,
+    redirect: '/tmp/menu1',
+    name: 'Tmp',
+    meta: { title: 'tmp菜单', icon: 'nested' },
+    children: [{
+      path: 'menu1',
+      component: () => import('@/views/tmp/temp/index'),
+      meta: { title: 'temp菜单', roles: ['admin'] } // admin角色能访问
+    }, {
+      path: 'menu2',
+      component: () => import('@/views/tmp/tenp/index'),
+      meta: { title: 'tenp菜单', roles: ['editor'] } // editor角色能访问
+    }]
   },
 
   // 404 page must be placed at the end !!!

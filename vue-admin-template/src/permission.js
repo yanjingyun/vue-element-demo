@@ -33,15 +33,14 @@ router.beforeEach(async(to, from, next) => {
         try {
           // 获取用户详细信息（如用户权限、用户名等）
           console.log('获取用户详细信息')
-          await store.dispatch('user/getInfo')
+          const { roles } = await store.dispatch('user/getInfo')
 
-          // 获取动态路由（未接入）
-          // store.dispatch('GenerateRoutes', { roles }).then(() => { // 生成可访问的路由表
-          //   router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
-          //   next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
-          // }
+          // 获取动态路由(基于角色)
+          const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
+          router.addRoutes(accessRoutes)
 
-          next()
+          // next()
+          next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')

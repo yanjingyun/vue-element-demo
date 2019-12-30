@@ -6,13 +6,19 @@ vsCode快捷键：
 
 vue-element-admin项目：
 	使用vue-cli的webpack-tmplate为基础模板构建。
+	详情：https://github.com/PanJiaChen/vue-element-admin/blob/master/README.zh-CN.md
+	--开发：
+	> git clone https://github.com/PanJiaChen/vue-element-admin.git
+	> cd vue-element-admin
+	> npm install --registry=https://registry.npm.taobao.org
+	> npm run dev
+	> http://localhost:9527
 
 
 src目录结构：
 	api && views	--存放业务模块的js和vue
 	components		--存放全局公共组件(部分页面级别的组件建议存放在各自views文件下)
 	store			--vuex
-webpack
 封装axios
 	封装axios(src\utils\request.js)
 	模拟环境配置
@@ -29,47 +35,9 @@ router-view
 	比如创建和编辑的页面是同一页面，默认情况下两个页面切换不会触发vue的create和mounted钩子，官方说可通过watch的$route的变化来做处理。另外，简单在router-view上加一个唯一的key，来保证路由切换时都会重新渲染触发钩子。
 
 
-登录权限篇：
-	前言：不同权限对应不同路由，同时侧边栏也需根据不同的权限异步生成。
-	登录：点击登录，后台验证通过后返回token（将token存储在cookie中，保证刷新页面后也能记住用户登录状态）；此后前端会根据token再去拉去user_info接口的用户详细信息（如权限、用户名等）。
-	权限验证：通过token获取用户对应role，根据role动态算出对应路由，通过router.addRoutes动态挂载这些路由。
-登录篇：
-	详情：src\views\login\index.vue
-	校验代码参考（element的form表单）：https://element.eleme.cn/#/zh-CN/component/form
-	
-	handleLogin()
-		// 1.执行loginForm组件的校验函数(element表单校验)
-		this.$refs.loginForm.validate
-		// 2.执行vuex的actions方法(详情查看src\store\modules\user.js的login方法)
-		this.$store.dispatch('user/login', this.loginForm)
-		// 2.1 执行api请求方法(详情src\api\user.js的login方法)
-		login({ username: username.trim(), password: password })
-		// 2.1.1 调用src\utils\request.js执行后台请求数据
-		// 2.1.1.1 实际调用mock\user.js的 /user/login 请求
-		// 2.2 actions的login调用成功，设置token到cookie
-		// 3.跳转首页
-		this.$router.push({ path: this.redirect || '/' })
-
-获取用户信息：
-	用户登录成功后，在全局钩子router.beforeEach中拦截路由，判断是否已获得token，在获取token后我们即可取获取用户的基本信息。
-
-权限篇：
-	前端会有一份路由表，它表示每一个路由可访问的权限。
-	页面级权限：通过token获取用户的role，动态根据用户的role算出其对应有权限的路由，再通过 router.addRoutes 动态挂载路由。
-	具体实现：
-		1）创建vue实例时将vue-router挂载，但这时候vue-router挂载一些登录或不用权限的公用页面；
-		2）当用户登录后，获取用户role，将role和路由表每个页面需要的权限作比较，生成最终用户可访问的路由表；
-		3）调用router.addRoutes(store.getters.addRouters)添加用户可访问的路由；
-		4）使用vuex管理路由表，根据vuex中可访问的路由渲染侧边栏组件。
-	
-
-
-
 @click.native.prevent 事件
 	.native 用来监听是本元素的事件
 	.prevent 用来阻止默认的事件。相当于原生的event.preventDefault()
-
-
 
 
 路由：
@@ -89,20 +57,6 @@ router-view
 面包屑导航：
 	通过 watch $route 动态生成
 	
-
-
-
-
-
-vue-admin-template项目：
-	https://github.com/PanJiaChen/vue-element-admin/blob/master/README.zh-CN.md
-
-开发：
-	git clone https://github.com/PanJiaChen/vue-element-admin.git
-	cd vue-element-admin
-	npm install --registry=https://registry.npm.taobao.org
-	npm run dev
-	http://localhost:9527
 
 布局(Layout)
 	对应代码(vue-element-admin/src/layout)
@@ -128,15 +82,26 @@ vue-admin-template项目：
 	5.更新data
 
 
-
-
 ******************************************************************************
-
-
 登录：
-	当用户填写完账号和密码后向服务端验证是否正确，验证通过之后，服务端会返回一个token，拿到token之后（我会将这个token存贮到cookie中，保证刷新页面后能记住用户登录状态），前端会根据token再去拉取一个 user_info 的接口来获取用户的详细信息（如用户权限，用户名等等信息）
+	当用户填写完账号和密码后向服务端验证是否正确，验证通过之后，服务端会返回一个token，拿到token之后（将token存储到cookie中，保证刷新页面后能记住用户登录状态），此后前端会根据token再去拉取user_info接口的详细用户信息（如用户权限，用户名等）。
 
 	token保存在本地原因(有效期是session)：下次打开页面或刷新页面时能够记住用户的登录状态，不用再去登陆页面重新登录。
+
+	--部分代码(详情：src\views\login\index.vue)
+	form表单校验(参考element的form表单)：https://element.eleme.cn/#/zh-CN/component/form
+	handleLogin()
+		// 1.执行loginForm组件的校验函数(element表单校验)
+		this.$refs.loginForm.validate
+		// 2.执行vuex的actions方法(详情查看src\store\modules\user.js的login方法)
+		this.$store.dispatch('user/login', this.loginForm)
+		// 2.1 执行api请求方法(详情src\api\user.js的login方法)
+		login({ username: username.trim(), password: password })
+		// 2.1.1 调用src\utils\request.js执行后台请求数据
+		// 2.1.1.1 实际调用mock\user.js的 /user/login 请求
+		// 2.2 actions的login调用成功，设置token到cookie
+		// 3.跳转首页
+		this.$router.push({ path: this.redirect || '/' })
 
 获取用户信息：
 	--详情：src\permission.js
@@ -145,14 +110,37 @@ vue-admin-template项目：
 	问：为什么不把用户信息也保存在本地？
 		假设把用户信息保存在本地，这时用新的电脑登录修改了用户名，之后再用原来的电脑登录，它默认会取读取本地cookie的名字，并不会取拉取新的用户信息。因此建议把login和getUserInfo两件事分开比较好。
 
-权限篇：(本demo没有)
+权限篇：
 	--详情参考 https://juejin.im/post/591aa14f570c35006961acac 的 main.js 模块
 	思路：前端有一份路由表，它表示每一个路由可访问的权限。当用户登录后，通过token获取用户的role，动态根据用户的role算出动态权限的路由，再通过 router.addRoutes 动态挂载这些路由。但这些控制只是页面级别的，还需要配合后端的权限校验。
-	
-	前端权限(页面级权限)：不同权限的用户显示不同的侧边栏和限制其所能进入的页面(也做了少许按钮级别的权限控制)
-	后端权限：请求的header里面携带用户的token，后端根据token来验证用户是否有权限执行该操作。
-
 	附：最后一个加载404页面
+	
+	前端权限(页面级权限)：不同权限的用户显示不同的侧边栏和限制其所能进入的页面(也做了少许按钮级别的权限控制)。
+		详情：通过token获取用户的role，动态根据用户的role算出其对应有权限的路由，再通过 router.addRoutes 动态挂载路由。
+		--具体实现：
+		1）创建vue实例时将vue-router挂载，但这时候vue-router挂载一些登录或不用权限的公用页面；
+		2）当用户登录后，获取用户role，将role和路由表每个页面需要的权限作比较，生成最终用户可访问的路由表；
+		3）调用router.addRoutes(store.getters.addRouters)添加用户可访问的路由；
+		4）使用vuex管理路由表，根据vuex中可访问的路由渲染侧边栏组件。
+	后端权限：
+		原因：前端权限仅是隐藏掉无权限的路由，但还是能将无权限的url发送给后台，因而需要后端权限。
+		实现：请求的header里面携带用户的token，后端根据token来验证用户是否有权限执行该操作。
+
+	权限实现代码流程(基于角色版)：
+		-1）创建动态菜单页面(@/views/tmp/*)
+		-2）在src/router/index.js中定义变量asyncRoutes，并将404页面从constantRoutes中移到asyncRoutes
+		-3）在src/store/modules文件夹中创建permission.js
+			在src/store/index.js中引入该permission.js文件
+			在src/store/getters.js中声明permission_routes变量
+		-4）改造src/permission.js中的路由守卫代码(获取动态路由，动态添加到路由中)
+		-5）改造src/layout/components/Sidebar/index.vue
+			注释掉routes()，并引入permission_routes变量
+		-6）测试
+			使用editor登录，仅能看到“tenp 页面”，使用admin登录能看到“temp页面”和“tenp页面”
+	基于权限版设计思路：
+		和基于角色版的差不多，只是动态路由asynRoutes变量的每一个路由配置会设置permission属性，表示该路由需要permission权限。
+		在获取用户基本信息时，同时会返回该用户的权限（包括路由权限和按钮权限），再通过这些权限匹配对应的路由及按钮。
+
 
 
 动态弹出提示：

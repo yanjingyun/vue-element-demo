@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Vue 测试实例 - 菜鸟教程(runoob.com)</title>
+<script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<div id="app">
+  <el-button type="primary" plain @click="addTr" size="small">添加</el-button>
+  <el-row>
+  	<el-col :span="24" v-for="(list,index) in lists">
+  		<el-row :gutter="20" class="margins">
+            <el-col :span="2">
+                职员{{index+1}}名字
+            </el-col>
+            <el-col :span="6">
+                <el-input type="text" v-model="list.name">
+            </el-col>
+            <el-col :span="6">
+                <el-button type="danger" @click="delTr(index)" size="small">删除信息</el-button>
+            </el-col>
+        </el-row>
+  	</el-col>
+  </el-row>
+
+
+</div>
+
+<script>
+new Vue({
+  el: '#app',
+  data: {
+    tables: [],
+    lists: [{
+        name: "",
+    },
+    {
+        name: "",
+    }],
+  },
+  methods: {
+  	addTr: function() {
+        let cope = {
+            name: "",
+        }
+        this.lists.push(cope);
+    },
+    delTr: function(index) {
+        this.lists.splice(index, 1);
+    }
+  }
+})
+</script>
+</body>
+</html>

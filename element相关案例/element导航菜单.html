@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Vue 测试实例 - 菜鸟教程(runoob.com)</title>
+	<script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<div id="app">
+
+	<!-- 详情：https://element.eleme.cn/#/zh-CN/component/menu -->
+	
+	<el-row>
+		<el-col :span="4">
+			<el-menu default-active="2-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" :collapse="isCollapse">
+				<!-- 这样写有问题，但官网上的是没问题的！！ -->
+				<!-- <el-menu-item index="1">
+					<i class="el-icon-setting"></i>
+					<span slot="title">首页</span>
+				</el-menu-item> -->
+				<!-- 替换上面 -->
+				<el-submenu index="1">
+					<template slot="title">
+						<i class="el-icon-setting"></i>
+						<span slot="title">首页</span>
+					</template>
+				</el-submenu>
+				
+				<el-submenu index="2">
+					<template slot="title">
+				      <i class="el-icon-location"></i>
+				      <span>导航一</span>
+				    </template>
+				    <el-menu-item index="2-1">选项1</el-menu-item>
+				    <el-submenu index="2-2">
+				    	<template slot="title">二级菜单</template>
+				    	<el-menu-item index="2-2-1">二级选项1</el-menu-item>
+				    	<el-menu-item index="2-2-2">二级选项1</el-menu-item>
+				    	<el-menu-item index="2-2-3">二级选项3</el-menu-item>
+				    </el-submenu>
+				    <el-menu-item index="2-3">选项3</el-menu-item>
+				</el-submenu>
+				<el-submenu index="3">
+					<template slot="title">
+				      <i class="el-icon-document"></i>
+				      <span>用户管理</span>
+				    </template>
+				    <el-menu-item index="3-1">用户管理</el-menu-item>
+				    <el-menu-item index="3-2">角色管理</el-menu-item>
+				    <el-menu-item index="3-3">权限管理</el-menu-item>
+				    <el-menu-item index="3-4">菜单管理</el-menu-item>
+				</el-submenu>
+			</el-menu>
+		</el-col>
+		<el-col :span="2">
+			<el-button @click="isCollapse = !isCollapse">展开/隐藏</el-button>
+		</el-col>
+	</el-row>
+</div>
+
+<script>
+	new Vue({
+		el: '#app',
+		data: {
+			isCollapse: true
+		},
+		methods: {
+			handleOpen(key, keyPath) {
+				console.log(key, keyPath);
+			},
+			handleClose(key, keyPath) {
+				console.log(key, keyPath);
+			}
+		}
+	})
+</script>
+<style type="text/css">
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+	width: 200px;
+	min-height: 400px;
+}
+</style>
+</body>
+</html>
