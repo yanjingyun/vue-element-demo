@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!-- import CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+  <div id="app">
+  	<el-table ref="aaTable" :data="aaArr" border>
+  	  
+      <!-- 索引 -->
+      <el-table-column label="下标">
+        <template slot-scope="scope">
+          <span>{{ scope.$index }}</span>
+        </template>
+      </el-table-column>
+      
+      <!-- 列的两种写法 -->
+      <el-table-column label="标题" prop="title"></el-table-column>
+      <el-table-column>
+  			<template slot="header" slot-scope="scope">标题2</template>
+  			<template slot-scope="scope">{{scope.row.title}}</template>
+  		</el-table-column>
+      <el-table-column label="名字">
+        <template slot-scope="scope">
+          <span>{{ scope.row.name }}</span>
+        </template>
+      </el-table-column>
+
+      <!-- 内容格式化输出formatter -->
+  		<el-table-column label="状态" prop="state" :formatter="stateFormat"></el-table-column>
+      
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-dropdown size="medium" split-button type="primary">
+            更多
+            <el-dropdown-menu slot="dropdown">
+              <!-- 这里的点击事件嵌套了几层结构，已经不是在根元素上了。需加上.native属性，表示监听组件根元素的原生事件 -->
+              <el-dropdown-item @click.native="getUp(scope.$index, scope.row)">上升</el-dropdown-item>
+              <el-dropdown-item @click.native="handleDelete(scope.$index, scope.row)">删除</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </template>
+      </el-table-column>
+  	</el-table>
+
+  	<div>实现动态列加载</div>
+  	<el-table :data="userArr" border>
+  		<el-table-column label="课程名称" prop="course"></el-table-column>
+  		<el-table-column v-for="(item, index) in userArr[0].users" :key="Date.now()">
+  			<template slot="header" slot-scope="scope">{{item.name}}</template>
+  			<template slot-scope="scope">{{scope.row.users[index].scores}}</template>
+  		</el-table-column>
+  	</el-table>
+  </div>
+</body>
+  <!-- import Vue before Element -->
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <!-- import JavaScript -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+			aaArr: [{
+				title: '标题1',
+				name: 'testAA1',
+				state: true
+			},
+			{
+				title: '标题2',
+				name: 'testAA2',
+				state: false
+			},
+			{
+				title: '标题3',
+				name: 'testAA3',
+				state: false
+			},
+			{
+				title: '标题4',
+				name: 'testAA4',
+				state: false
+			}],
+			userArr: [{
+				id: 1,
+				course: 'Course1',
+				users: [{
+					name: '张三',
+					scores: 122
+				},
+				{
+					name: '李四',
+					scores: 98
+				}]
+			},
+			{
+				id: 2,
+				course: 'Course2',
+				users: [{
+					name: '张三',
+					scores: 23
+				},
+				{
+					name: '李四',
+					scores: 76
+				}]
+			}]
+        }
+      },
+      methods: {
+      	stateFormat(row, column) {
+      		if (row.state === true) {
+      			return "正确";
+      		} else {
+      			return "错误";
+      		}
+      	},
+        getUp(index, row) {
+          console.log(index, row);
+        },
+        handleDelete(index, row) {
+          this.aaArr.splice(index, 1);
+        }
+      }
+    })
+  </script>
+</html>

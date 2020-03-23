@@ -1,0 +1,48 @@
+前端app开发：
+	es6 web-pack
+	vue.js uni-app element
+	react taro ant-design
+	https://taro.aotu.io   canvas
+
+
+浏览器访问优化：
+	-1）减少http请求：因为http是无状态的，每次请求的开销都比较昂贵（需要建立通信链路、数据传输，而服务端对于每个http请求都需要启动独立的线程去处理）
+		减少http的主要手段：合并CSS、合并JS、合并图片（CSS精灵，利用偏移定位image）
+	-2）使用浏览器缓存：设置http头中Cache-Control和Expires属性
+	-3）启用压缩：可以对html、css、js文件启用Gzip压缩，可以达到较高的压缩效率，但是压缩会对服务器及浏览器产生一定的压力
+	-4）CSS放页面最上面，JS放页面最下面。
+		浏览器会在下载完全部css之后才开始对整个页面进行渲染，因此最好把css放在页面最上面；
+		浏览器在加载js后会立即执行，有可能会阻塞整个页面，造成页面显示缓慢，因此最好将JS放在页面最下面
+	-5）减少Cookie传输
+		一方面，太大的Cookie会严重影响数据传输；另一方面，对于某些静态资源的访问（如CSS、JS等）发送Cookie没有意义；
+
+
+
+@change传递自定义参数：
+	<el-select v-model="item.value" @change="((val)=>{changeStatus(val, index)})">
+	详情：https://www.cnblogs.com/mmzuo-798/p/10438071.html
+
+
+
+vue知识、脚手架、项目集合：
+	https://juejin.im/post/5c52a572e51d4504375b98de
+vue layout学习：--未整理
+	https://blog.csdn.net/weixin_43583693/article/details/101534708
+
+
+
+解决Cannot read property range of null 错误？
+	详情：http://www.fly63.com/article/detial/2855
+	问题描述：
+		Module build failed (from ./node_modules/eslint-loader/index.js):
+		TypeError: Cannot read property 'range' of null
+	问题说明：之前import(str)一直报错，这个跟eslint有关
+	
+	解决：在项目里找到对应的工程：直接删除里面的node_modules文件夹，然后重新npm install下就可以了；
+
+
+
+
+
+
+

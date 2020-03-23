@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Vue multi checkbox</title>
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+<div id="app">
+  <p>单选 清空</p>
+  <el-select v-model="value1" clearable placeholder="请选择">
+    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+  </el-select>
+
+  <p>多选 搜素</p>
+  <el-select v-model="value2" multiple filterable placeholder="请选择">
+    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+  </el-select>
+
+  <p>多选 仅显示1个元素 搜素</p>
+  <el-select v-model="value3" multiple collapse-tags filterable placeholder="请选择">
+    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+  </el-select>
+
+  <p>封装多选框(全选功能)</p>
+  <el-select v-model="value" multiple filterable :collapse-tags="isCollapseTags" placeholder="请选择" @change="mutipleSelectChange">
+    <div style="line-height: 34px;padding: 0 20px;">
+      <el-checkbox @change="selectAllFun">全选</el-checkbox>
+    </div>
+  	<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+  </el-select>
+</div>
+
+<script>
+new Vue({
+  el: '#app',
+  props: {
+  	val: '2,3'
+  },
+  data() {
+    return {
+    	options: [{
+        value: '1',
+        label: '黄金糕'
+      }, {
+        value: '2',
+        label: '双皮奶'
+      }, {
+        value: '3',
+        label: '蚵仔煎'
+      }, {
+        value: '4',
+        label: '龙须面'
+      }, {
+        value: '5',
+        label: '北京烤鸭'
+      }],
+
+
+      value1: '',
+      value2: '',
+      value3: '',
+      value: '2,3'.split(','),
+      isCollapseTags: false
+    }
+  },
+  methods: {
+  	mutipleSelectChange(val) {
+  		console.log(val.length)
+  		if (val.length > 2) {
+  			this.isCollapseTags = true; 
+  		}
+  	},
+    selectAllFun(val) {
+      if (val) {
+        const options = this.options;
+        const valueArr = [];
+        for (const i of options) {
+          valueArr.push(i.value);
+        }
+        this.value = valueArr;
+      } else {
+        this.value = '';
+      }
+    }
+  }
+})
+</script>
+</body>
+</html>

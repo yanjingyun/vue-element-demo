@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<!-- import CSS -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<div id="app">
+<el-form ref="ruleForm" :model="ruleForm" :rules="rules" show-message status-icon>
+	<el-button type="primary" plain @click="ruleForm.aaArr.push({name: ''})" size="small">添加行</el-button>
+	<el-table ref="aaTable" :data="ruleForm.aaArr" border>
+		<el-table-column label="序列">
+			<template slot-scope="scope">
+				名字{{ scope.$index+1 }}
+			</template>
+		</el-table-column>
+		<el-table-column label="名字">
+			<template slot-scope="scope">
+				<el-form-item :prop="'aaArr.' + scope.$index + '.name'" required>
+					<el-input type="text" v-model="scope.row.name">
+				</el-input>
+			</template>
+		</el-table-column>
+		<el-table-column label="操作">
+			<template slot-scope="scope">
+				<el-button type="primary" @click="ruleForm.aaArr.splice(scope.$index+1, 0, {name: ''})" size="small">新增</el-button>
+				<el-button type="danger" @click="ruleForm.aaArr.splice(scope.$index, 1)" size="small">删除</el-button>
+			</template>
+		</el-table-column>
+	</el-table>
+	<div>
+		名字： {{ JSON.stringify(ruleForm.aaArr) }}
+	</div>
+	<el-button type="primary" @click="submitForm()">保存</el-button>
+</el-form>
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+new Vue({
+	el: '#app',
+	data() {
+	return {
+		ruleForm: {
+			aaArr:[{
+				name: 'testAA1'
+			},
+			{
+				name: ''
+			}]
+		},
+		rules: {
+
+		}
+	}
+	},
+	methods: {
+		submitForm() {
+			this.$refs['ruleForm'].validate((valid) => {
+				if (valid) {
+					alert('submit!');
+				} else {
+					console.log('error submit!!');
+				}
+			})
+		}
+	}
+})
+</script>
+<style type="text/css">
+	.el-form-item {
+		margin-bottom: 0px;
+	}
+</style>
+</html>

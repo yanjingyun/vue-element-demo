@@ -1,0 +1,111 @@
+
+表格说明(el-table)：
+	--实例：参考test_el-table.html
+	<el-table :data="list">
+		<el-table-column label="序号">
+			<template slot-scope="scope">
+				<span>{{ scope.$index }}</span>
+			</template>
+			<template slot-scope="scope">
+				// scope.row直接取到该单元格回显，就是数组里的元素对象，即list[scope.$index].title
+				<span>{{ scope.row.title }}</span>
+			</template>
+		</el-table-column>
+	</el-table>
+
+	template中的slot-scope="scope"说明：
+		scope 			//这里取到当前单元格
+		scope.$index 	//表示当前索引
+		scope.row 		//表示数组里的元素对象，即list[scope.$index]
+
+	头部内容两种写法调整：
+		--写法1：
+		<el-table-column label="标题" prop="title"></el-table-column>
+		--写法2：
+		<el-table-column>
+  			<template slot="header" slot-scope="scope">标题</template> //显示表头
+  			<template slot-scope="scope">{{scope.row.title}}</template> //显示表内容
+  		</el-table-column>
+
+  	el-table-column内容格式化输出：
+		描述：如何根据数据不同显示不同的值。后台给的字段是state，它的值为true或false，要求显示在表格里是“正确”或“错误”？
+		答：可以给el-table-column添加一个formatter属性。
+
+	实现动态列加载：
+		--描述：有时候列是通过动态加载出来的。
+		<el-table :data="userArr" border>
+	  		<el-table-column label="课程名称" prop="course"></el-table-column>
+	  		<el-table-column v-for="(item, index) in userArr[0].users" :key="Date.now()">
+	  			<template slot="header" slot-scope="scope">{{item.name}}</template>
+	  			<template slot-scope="scope">{{scope.row.users[index].scores}}</template>
+	  		</el-table-column>
+	  	</el-table>
+
+	  	userArr: [{
+			course: 'Course1',
+			users: [{name: '张三', scores: 122}, {name: '李四',cores: 98}]
+		}, {
+			course: 'Course2',
+			users: [{name: '张三',scores: 23},{name: '李四',scores: 76}]
+		}]
+
+
+.native属性：想在某个组件的根元素上监听一个原生事件，即在父组件中给子组件绑定一个原生的事件，事件能写在父组件中。
+	<parent>
+		<child @click.native="clickFn">按钮</child>
+	</parent>
+
+.prevent和.passive属性：
+	prevent是拦截默认事件，passive是不拦截默认事件。
+	@click.prevent="fun(index)"
+
+
+
+
+表单说明(el-form)：
+	详情：https://element.eleme.cn/#/zh-CN/component/form
+	参考：test_form表单校验.html、test_动态input生成&校验.html
+	实例:
+		<el-form ref="ruleForm" :model="ruleForm" :rules="rules" show-message status-icon>...</el-form>
+	
+	表单属性(form attributes)：
+		model：表单数据对象
+		rules：表单校验规则
+		show-message：是否显示校验错误信息，默认false
+		status-icon：是否在输入框中显示校验结果反馈图标，默认fasle
+	表单方法(form methods):
+		validate：对整个表单进行校验
+		validateField：对部分字段进行校验
+		resetFields：对整个表单进行重置
+		clearValidate：移除表单项的校验结果
+	item属性(form-item attributes):
+		prop：传入form组件的model中的字段
+		label：标签文本
+		label-width：标签文本宽度
+		require：是否必填，若不设置会根据表单校验规则自动生成
+		rules：表单校验规则，与“表单属性中的rules”一致
+		show-message:是否显示校验错误信息
+
+
+自定义表单校验：
+	:rules="{validator: validConditionValue, type: 'DATE', required: true, trigger: 'blur'}"
+
+	data() {
+		return {
+			validConditionValue: (rule, value, callback) => {
+				if (rule.required && !value) {
+					callback(new Error('必填项'))
+				}
+
+				if (rule.type === 'DATE' && new Date(value) > new Date()) {
+					console.log('不能晚于当前日期')
+					callback(new Error('不能晚于当前日期'))
+				}
+				callback()
+			}
+		}
+	}
+
+
+
+

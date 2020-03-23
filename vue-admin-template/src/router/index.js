@@ -160,6 +160,34 @@ export const constantRoutes = [
         meta: { title: '外向连接', icon: 'link' }
       }
     ]
+  },
+
+  {
+    path: '/chart',
+    component: Layout,
+    redirect: '/chart/0101',
+    name: 'System',
+    meta: { title: '图表统计', icon: 'example' },
+    children: [
+      {
+        path: '0101',
+        name: '0101',
+        component: () => import('@/views/chart/theme'),
+        meta: { title: '主题1', icon: 'tree' }
+      },
+      {
+        path: '0102',
+        name: '0102',
+        component: () => import('@/views/chart/theme'),
+        meta: { title: '主题3', icon: 'tree' }
+      },
+      {
+        path: '0103',
+        name: '0103',
+        component: () => import('@/views/chart/theme'),
+        meta: { title: '主题3', icon: 'tree' }
+      }
+    ]
   }
 
 ]
