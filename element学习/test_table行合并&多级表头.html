@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Vue table多行表头&合并行数据</title>
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+<div id="app">
+  <el-table
+    border
+    :data="reportBodyList"
+    :span-method="reportBodyListSpan"
+    :show-summary="showSummary"
+    highlight-current-row
+  >
+    <el-table-column v-for="(i, index) of headList" :key="index" :label="i.label" :prop="i.value">
+      <el-table-column v-for="(j, index2) of i.children" :key="index2" :label="j.label" :prop="j.value" />
+    </el-table-column>
+  </el-table>
+</div>
+
+<script>
+new Vue({
+  el: '#app',
+  props: {
+  	val: '2,3'
+  },
+  data() {
+    return {
+    	reportBodyList:[
+        {"XB":"男","MZ":"汉族","WHCD__10":10,"WHCD__11":2,"WHCD__20":2},
+        {"XB":"男","MZ":"蒙古族","WHCD__10":3,"WHCD__11":4,"WHCD__20":5},
+        {"XB":"男","MZ":"回族","WHCD__10":"4","WHCD__11":"7","WHCD__20":"6"},
+        {"XB":"女","MZ":"汉族","WHCD__10":2,"WHCD__11":3,"WHCD__20":6},
+        {"XB":"女","MZ":"蒙古族","WHCD__10":5,"WHCD__11":"5","WHCD__20":"4"},
+        {"XB":"女","MZ":"回族","WHCD__10":"6","WHCD__11":"4","WHCD__20":"8"}
+      ],
+      headList:[
+        {"label":"性别","value":"XB"},
+        {"label":"民族","value":"MZ"},
+        {"label":"文化程度","value":"WHCD","children":[
+          {"label":"研究生","value":"WHCD__10"},
+          {"label":"博士研究生","value":"WHCD__11"},
+          {"label":"大学本科","value":"WHCD__20"}]
+        }
+      ],
+      reportRowSpanMap: {"0" : 3, "3" : 3},
+      showSummary: true // 合计行显示
+    }
+  },
+  methods: {
+    // rowIndex-行坐标 columnIndex-列坐标
+    reportBodyListSpan({ row, column, rowIndex, columnIndex }) { // 行合并
+      // 数据的二维数组，若某格子占用了i行j列，则i行j列的格子只能是占用0行0列（表示不显示该格子的数据）
+      if (columnIndex === 0) { // group是两个字段，第一列才需要设置span合并行
+        if (!Object.keys(this.reportRowSpanMap).length) {
+          return
+        }
+        const rowspan = this.reportRowSpanMap[rowIndex]
+        if (rowspan) { // 行重复中第一个位置
+          return {
+            rowspan: rowspan, // N个重复的
+            colspan: 1
+          }
+        } else {
+          return {
+            rowspan: 0,
+            colspan: 0
+          }
+        }
+      }
+    }
+  }
+})
+</script>
+</body>
+</html>

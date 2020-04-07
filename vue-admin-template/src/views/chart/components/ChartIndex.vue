@@ -1,7 +1,7 @@
 <template>
   <el-row>
     {{ chartConfig.title }}
-    <div :id="chartConfig.id" style="width: 600px;height: 400px;" />
+    <div :id="chartConfig.id" style="width: 90%;height: 400px;" />
   </el-row>
 </template>
 <script>
