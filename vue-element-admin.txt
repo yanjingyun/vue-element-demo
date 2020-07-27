@@ -168,3 +168,30 @@ router-view
 element表单验证
 NProgress
 document.title = '动态修改页面标题';
+
+
+
+
+************************
+添加echart图表
+	详情参考src\views\chart目录相关代码
+	描述：前端先通过themeId获取该主题下所有图表配置信息集合ChartConfigList，再通过页面的查询参数去执行图表配置信息ChartConfig中的sql得到该图表的各项指标数据，最后渲染得到图表。
+
+
+************************
+Element-ui组件库Table表格导出Excel:
+详情：https://www.cnblogs.com/hellofangfang/p/10929770.html
+XLSX官网：https://www.javascriptcn.com/read-32526.html
+安装：
+	npm install --save xlsx file-saver
+
+//引入导出excel表格依赖
+	import FileSaver from "file-saver";
+	import XLSX from "xlsx";
+
+使用：
+	<button @click="exportExcel('testTable', '导出结果')">点击导出</button>
+	详情参考：exportExcel()方法
+
+
+

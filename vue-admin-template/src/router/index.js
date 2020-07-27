@@ -97,6 +97,19 @@ export const constantRoutes = [
   },
 
   {
+    path: '/export-excel',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Excel',
+        component: () => import('@/views/excel/index'),
+        meta: { title: '导出excel', icon: 'form' }
+      }
+    ]
+  },
+
+  {
     path: '/nested',
     component: Layout,
     redirect: '/nested/menu1',
